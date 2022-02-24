@@ -2,9 +2,24 @@ class Contributor:
     def __init__(self, name, skills) -> None:
         self.name = name
         self.skills = skills
-    
+        self.free = True
+        self.skillIdx = -1
+
     def __str__(self) -> str:
         return f"name: {self.name}, skills {self.skills}"
+
+    def hasTheSkill(self, skill) -> bool:
+        index = [index for index, element in enumerate(self.skills) if element[0] == skill[0] and self.free and element[1] >= skill[1]]
+
+        if index and self.skills[index[0]][1] == skill[1]:
+            self.skillIdx = index
+
+        return False if not index else True
+
+    def addSkill(self):
+        if (self.skillIdx != -1):
+            self.skills[self.skillIdx][1] += 1
+            self.skillIdx = -1
 
 class Project:
     def __init__(self, name, days, score, bestBefore, nbRoles, skills) -> None:
@@ -14,14 +29,18 @@ class Project:
         self.bestBefore = bestBefore
         self.nbRoles = nbRoles
         self.skills = skills
+        self.done = False
         self.projects = []
         self.contributors = []
     
     def __str__(self) -> str:
-        return f'name : {self.name}, days : {self.days}, score : {self.score}, best before : {self.nbRoles}, nbRoles : {self.nbRoles}, skills : {self.skills}'
+        return f'name : {self.name}, days : {self.days}, score : {self.score}, best before : {self.bestBefore}, nbRoles : {self.nbRoles}, skills : {self.skills}'
+
+    def getBestBefore(self) -> int:
+        return int(self.bestBefore)
 
 class Parsing:
-    def __init__(self, filepath) -> None:
+    def __init__(self, filepath) -> list:
         self.filepath = filepath
         self.result = []
 
